@@ -48,9 +48,7 @@
                 <h2>🔑 시스템 준비 (Gemini 네이티브 오디오)</h2>
                 <p>무료 발급받은 <strong>구글 Gemini API 키</strong>를 입력해주세요.</p>
                 <input type="password" id="api-key" placeholder="AIza..." /><br>
-                <!-- API 발급 링크 추가된 부분 -->
                 <a href="https://aistudio.google.com/app/apikey" target="_blank" class="api-link">무료 API 키 발급 및 복사하기 (새 창)</a>
-                
                 <button onclick="saveApiAndRequestMic()" style="padding: 12px 25px; font-size: 18px; cursor: pointer; border-radius: 8px; font-weight: bold;">마이크 허용 및 시작하기</button>
             </div>
         </div>
@@ -80,27 +78,27 @@
     </div>
 
     <script>
-        // 목소리 이름 Bodi, Nika, Gero 적용
+        // 오류를 수정한 공식 API 목소리(Charon, Leda, Algenib)로 원복
         const CHARACTERS = [
             {
                 name: "세종대왕",
                 video: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/sejong.mp4",
                 image: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/sejongking.png",
-                voice: "Bodi", 
+                voice: "Charon", // 차분하고 지적인 톤
                 prompt: "당신은 조선의 4대 왕 세종대왕입니다. 초등학교 2학년 학생과 대화하고 있습니다. 반드시 '~했소', '~하오' 같은 옛날 사극 말투를 사용하세요. 초등학교 2학년이 이해하기 쉬운 단어로, 다정하고 근엄하게 2~4문장으로 짧게 대답하세요."
             },
             {
                 name: "유관순",
                 video: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/yukwansun.mp4",
                 image: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/yukwan.png",
-                voice: "Nika", 
+                voice: "Leda", // 젊고 당찬 톤
                 prompt: "당신은 독립운동가 유관순 열사입니다. 초등학교 2학년 학생과 대화하고 있습니다. 반드시 '~했어요', '~해요' 같은 현대 존댓말을 사용하세요. 초등학교 2학년이 이해하기 쉬운 단어로, 맑고 당차게 2~4문장으로 짧게 대답하세요."
             },
             {
                 name: "이순신",
                 video: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/leesunshin.mp4",
                 image: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/leesun.png",
-                voice: "Gero",
+                voice: "Algenib", // 매우 묵직하고 거친 장군 톤
                 prompt: "당신은 조선의 명장 이순신 장군입니다. 초등학교 2학년 학생과 대화하고 있습니다. 반드시 '~했소', '~하오' 같은 옛날 사극 말투를 사용하세요. 초등학교 2학년이 이해하기 쉬운 단어로, 매우 묵직하고 용감하게 2~4문장으로 짧게 대답하세요."
             }
         ];
