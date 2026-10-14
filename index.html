@@ -29,26 +29,25 @@
         .ui-layer { position: absolute; bottom: 8%; width: 100%; display: flex; flex-direction: column; align-items: center; z-index: 10; }
         #mic-btn { background: #e74c3c; color: white; border: none; border-radius: 50%; width: 90px; height: 90px; font-size: 35px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.6); display: none; transition: 0.3s; }
         #mic-btn:hover { background: #c0392b; transform: scale(1.1); }
-        #mic-btn.recording { background: #2ecc71; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
         
         #status-text { background: rgba(0,0,0,0.7); color: white; padding: 12px 25px; border-radius: 25px; margin-bottom: 20px; font-size: 22px; display: none; font-weight: bold; }
         
-        /* 다른 인물 만나기 버튼 (좌측 상단, 덜 눈에 띄게) */
+        /* 다른 인물 만나기 버튼 */
         #back-btn { position: absolute; top: 20px; left: 20px; padding: 8px 15px; font-size: 14px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3); border-radius: 5px; cursor: pointer; z-index: 20; display: none; transition: 0.2s; }
         #back-btn:hover { background: rgba(255,255,255,0.3); color: #fff; }
 
-        /* 동영상 스킵 버튼 (우측 하단) */
+        /* 동영상 스킵 버튼 */
         #skip-btn { position: absolute; bottom: 30px; right: 30px; padding: 10px 20px; font-size: 16px; background: rgba(0,0,0,0.6); color: white; border: 1px solid white; border-radius: 8px; cursor: pointer; z-index: 25; display: none; font-weight: bold; }
         #skip-btn:hover { background: rgba(255,255,255,0.9); color: black; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 1. 첫 페이지 (수정됨) -->
+        <!-- 1. 첫 페이지 -->
         <div id="api-page">
             <div class="api-box">
                 <h2 style="font-size: 32px; margin-bottom: 30px;">📜 역사 인물의 이야기를 들어요</h2>
+                <!-- 시작 버튼 -->
                 <button onclick="startApp()" style="padding: 15px 30px; font-size: 20px; cursor: pointer; border-radius: 8px; font-weight: bold; background: #fff; color: #000; border: none;">역사 인물을 만나보시겠습니까?</button>
             </div>
         </div>
@@ -71,6 +70,7 @@
             
             <div class="ui-layer">
                 <div id="status-text">마이크 버튼을 누르고 질문하세요!</div>
+                <!-- 가짜 마이크 버튼 -->
                 <button id="mic-btn">🎤</button>
             </div>
             
@@ -84,49 +84,30 @@
             {
                 name: "세종대왕",
                 video: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/sejong.mp4",
-                image: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/sejongking.png",
-                prompt: "당신은 조선의 4대 왕 세종대왕입니다. 초등학교 2학년 학생과 대화하고 있습니다. 반드시 '~했소', '~하오' 같은 옛날 사극 말투를 사용하세요. 초등학교 2학년이 이해하기 쉬운 단어로, 다정하고 근엄하게 2~4문장으로 짧게 대답하세요. 기호(별표 등) 없이 소리내어 읽을 수 있는 글로만 답하세요."
+                image: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/sejongking.png"
             },
             {
                 name: "유관순",
                 video: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/yukwansun.mp4",
-                image: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/yukwan.png",
-                prompt: "당신은 독립운동가 유관순 열사입니다. 초등학교 2학년 학생과 대화하고 있습니다. 반드시 '~했어요', '~해요' 같은 현대 존댓말을 사용하세요. 초등학교 2학년이 이해하기 쉬운 단어로, 맑고 당차게 2~4문장으로 짧게 대답하세요. 기호(별표 등) 없이 소리내어 읽을 수 있는 글로만 답하세요."
+                image: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/yukwan.png"
             },
             {
                 name: "이순신",
                 video: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/leesunshin.mp4",
-                image: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/leesun.png",
-                prompt: "당신은 조선의 명장 이순신 장군입니다. 초등학교 2학년 학생과 대화하고 있습니다. 반드시 '~했소', '~하오' 같은 옛날 사극 말투를 사용하세요. 초등학교 2학년이 이해하기 쉬운 단어로, 매우 묵직하고 용감하게 2~4문장으로 짧게 대답하세요. 기호(별표 등) 없이 소리내어 읽을 수 있는 글로만 답하세요."
+                image: "https://raw.githubusercontent.com/sae6gnicky/peaple/main/leesun.png"
             }
         ];
 
         let currentChar = null;
-        let isWaiting = false;
-        
-        // 음성 인식 설정
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'ko-KR';
-        recognition.interimResults = false;
 
+        // 시작 버튼 기능
         function startApp() {
-            // TTS 음성 목록 미리 로드
-            window.speechSynthesis.getVoices();
-
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(() => {
-                    document.getElementById('api-page').style.display = 'none';
-                    document.getElementById('select-page').style.display = 'flex';
-                })
-                .catch(err => {
-                    alert("마이크 권한을 허용해야 진행할 수 있습니다.");
-                    // 마이크가 없어도 진행하고 싶다면 아래 두 줄 주석 해제
-                    // document.getElementById('api-page').style.display = 'none';
-                    // document.getElementById('select-page').style.display = 'flex';
-                });
+            // 바로 화면만 전환하도록 처리
+            document.getElementById('api-page').style.display = 'none';
+            document.getElementById('select-page').style.display = 'flex';
         }
 
+        // 캐릭터 선택 기능
         function selectChar(index) {
             currentChar = CHARACTERS[index];
             document.getElementById('select-page').style.display = 'none';
@@ -167,7 +148,6 @@
         }
 
         function goBack() {
-            window.speechSynthesis.cancel();
             const video = document.getElementById('char-video');
             video.pause();
             
@@ -175,77 +155,16 @@
             document.getElementById('select-page').style.display = 'flex';
             document.getElementById('back-btn').style.display = 'none';
             document.getElementById('skip-btn').style.display = 'none';
-            isWaiting = false;
-            document.getElementById('mic-btn').classList.remove('recording');
         }
 
+        // 페이크 마이크 버튼 설정
         const micBtn = document.getElementById('mic-btn');
         const statusText = document.getElementById('status-text');
 
         micBtn.onclick = () => {
-            if(isWaiting) return;
-            window.speechSynthesis.cancel(); // 이전 음성 취소
-            
-            recognition.start();
-            micBtn.classList.add('recording');
-            statusText.innerText = "듣고 있습니다...";
+            // 마이크 버튼 클릭 시 아무 기능도 작동하지 않고 글자만 바뀜
+            statusText.innerText = "현재 영상 전용 모드입니다.";
         };
-
-        recognition.onresult = async (event) => {
-            micBtn.classList.remove('recording');
-            const transcript = event.results[0][0].transcript;
-            statusText.innerText = "답변을 생각 중입니다...";
-            isWaiting = true;
-
-            // 실제 API 통신을 하지 않으므로 임의의 대기 시간 후 더미 응답 출력
-            setTimeout(() => {
-                const replyText = "지금은 대화 기능이 비활성화되어 있습니다. 반갑소!";
-                speakText(replyText);
-            }, 1000);
-        };
-
-        recognition.onerror = () => {
-            micBtn.classList.remove('recording');
-            statusText.innerText = "마이크를 다시 눌러주세요.";
-            isWaiting = false;
-        };
-
-        // 고음질 TTS(음성 합성) 함수
-        function speakText(text) {
-            statusText.innerText = "대답하는 중...";
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ko-KR';
-            utterance.rate = 0.95; // 사극 느낌을 위해 약간 여유롭게
-            
-            const voices = window.speechSynthesis.getVoices();
-            let selectedVoice = null;
-
-            if (currentChar.name === "세종대왕" || currentChar.name === "이순신") {
-                // 남성
-                selectedVoice = voices.find(v => v.name.includes("InJoonNeural")) || voices.find(v => v.name.includes("Male") || v.name.includes("남성") && v.lang === 'ko-KR');
-                utterance.pitch = currentChar.name === "세종대왕" ? 0.7 : 0.3; // 이순신은 더 묵직하게
-            } else {
-                // 여성
-                selectedVoice = voices.find(v => v.name.includes("SunHiNeural")) || voices.find(v => v.name.includes("Female") || v.name.includes("여성") && v.lang === 'ko-KR');
-                utterance.pitch = 1.1;
-            }
-
-            if (selectedVoice) {
-                utterance.voice = selectedVoice;
-            }
-
-            utterance.onend = () => {
-                statusText.innerText = "마이크 버튼을 누르고 질문하세요!";
-                isWaiting = false;
-            };
-
-            utterance.onerror = () => {
-                statusText.innerText = "음성 출력 중 오류가 발생했습니다.";
-                isWaiting = false;
-            };
-
-            window.speechSynthesis.speak(utterance);
-        }
     </script>
 </body>
 </html>
